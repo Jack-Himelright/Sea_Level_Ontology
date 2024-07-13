@@ -9,7 +9,7 @@ PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
 
 CONSTRUCT {
     ?Station_iri a msl:NOAAStation ;
-            gist:hasPhysicalLocation ?IDPoint_iri ;
+            msl:measuresSeaLevelRelativeTo ?IDPoint_iri ;
             msl:hasMeanSeaLevelChange ?MSL_MmYr_iri ;
             msl:hasMeanSeaLevelChange ?MSL_FtC_iri ;
             msl:StationID ?StationID ;
@@ -52,5 +52,5 @@ WHERE {
     BIND(CONCAT(STR(?StationName), " NOAA Station") AS ?stationLabel)
     BIND(CONCAT(STR(?MSLTrendsMmYr), " (mm/yr)") AS ?mmYrLabel)
     BIND(CONCAT(STR(?MSLTrendFtCentury), " (ft/C)") AS ?ftCLabel)
-    BIND(CONCAT("Location of NOAA Station ", STR(?StationID)) AS ?geoPointLabel)
+    BIND(CONCAT("Benchmark of NOAA Station", " ", STR(?StationID)) AS ?geoPointLabel)
 }
