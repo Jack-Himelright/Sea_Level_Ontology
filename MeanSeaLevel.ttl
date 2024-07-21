@@ -21,19 +21,17 @@
 
 ###  https://w3id.org/semanticarts/ontology/meanSeaLevel#hasMeanSeaLevelChange
 msl:hasMeanSeaLevelChange rdf:type owl:ObjectProperty ;
-                          rdfs:subPropertyOf gist:hasMagnitude ;
-                          rdfs:domain msl:NOAAStation ;
-                          rdfs:range msl:DistancePerDuration ;
-                          skos:definition "Relates a NOAA station to the magnitude of mean sea level change it has recorded." ;
+                          rdfs:range msl:meanSeaLevelChange ;
+                          skos:definition "Relates an entity that measured sea level changes to its mean recorded sea level change over some period of time." ;
                           skos:prefLabel "has mean sea level change" .
 
 
-###  https://w3id.org/semanticarts/ontology/meanSeaLevel#measuresSeaLevelRelativeTo
-msl:measuresSeaLevelRelativeTo rdf:type owl:ObjectProperty ;
-                               rdfs:domain msl:NOAAStation ;
-                               rdfs:range gist:GeoPoint ;
-                               skos:definition "The point on land (benchmark) in relation to which a NOAA station measures change in sea level." ;
-                               skos:prefLabel "measures sea level relative to" .
+###  https://w3id.org/semanticarts/ontology/meanSeaLevel#measurementOfSeaLevelRelativeTo
+msl:measurementOfSeaLevelRelativeTo rdf:type owl:ObjectProperty ;
+                                    rdfs:domain msl:meanSeaLevelChange ;
+                                    rdfs:range gist:GeoPoint ;
+                                    skos:definition "Relates a mean sea level change to the point on land (benchmark) in relation to which it was a measurement of the sea level change." ;
+                                    skos:prefLabel "measurement of sea level relative to" .
 
 
 #################################################################
@@ -56,36 +54,29 @@ msl:StationName rdf:type owl:DatatypeProperty ;
                 skos:prefLabel "station name" .
 
 
+###  https://w3id.org/semanticarts/ontology/meanSeaLevel#has95PercentConfidenceInterval
+msl:has95PercentConfidenceInterval rdf:type owl:DatatypeProperty ;
+                                   rdfs:domain gist:Event ;
+                                   rdfs:range xsd:double ;
+                                   skos:definition "Relates a measurement to its 95% confidence interval, where the unit of measure for the confidence interval is the same as the unit of measure used in the measurement." ;
+                                   skos:editorialNote "A 95% confidence interval is a magnitude, with its own numeric value and unit of measure. So to be more explicit, this property relates a measurement to the numeric value of a special 95% confidence interval: the measurement's 95% CI represented with the same unit of measure as the measurement. (In principle, one could use different units to record the confidence interval.)" ;
+                                   skos:prefLabel "has 95% confidence interval" .
+
+
 ###  https://w3id.org/semanticarts/ontology/meanSeaLevel#percentageComplete
 msl:percentageComplete rdf:type owl:DatatypeProperty ;
-                       rdfs:domain msl:NOAAStation ;
+                       rdfs:domain gist:Event ;
                        rdfs:range xsd:double ;
-                       skos:definition "The percentage of years during which a given NOAA station has been active for which that station provides sea level measurements." ;
+                       skos:definition "Relates a multi-year measurement process to the percentage of years within the process in which measurements were taken." ;
                        skos:prefLabel "percentage complete" .
 
 
 ###  https://w3id.org/semanticarts/ontology/meanSeaLevel#yearRange
 msl:yearRange rdf:type owl:DatatypeProperty ;
-              rdfs:domain msl:NOAAStation ;
+              rdfs:domain gist:Event ;
               rdfs:range xsd:int ;
-              skos:definition "Relates a NOAA station to the total number of years it has been active, up to and including 2023." ;
+              skos:definition "Relates an event to the total number of years over which it occurred." ;
               skos:prefLabel "year range" .
-
-
-###  https://w3id.org/semanticarts/ontology/meanSeaLevel#95PercentConfidenceIntervalFtCentury
-<https://w3id.org/semanticarts/ontology/meanSeaLevel#95PercentConfidenceIntervalFtCentury> rdf:type owl:DatatypeProperty ;
-                                                                                           rdfs:domain msl:NOAAStation ;
-                                                                                           rdfs:range xsd:double ;
-                                                                                           skos:definition "Relates a NOAA station to its 95% confidence interval for its recorded mean sea level change in ft/century." ;
-                                                                                           skos:prefLabel "95% confidence interval (ft/century)" .
-
-
-###  https://w3id.org/semanticarts/ontology/meanSeaLevel#95PercentConfidenceIntervalMmYr
-<https://w3id.org/semanticarts/ontology/meanSeaLevel#95PercentConfidenceIntervalMmYr> rdf:type owl:DatatypeProperty ;
-                                                                                      rdfs:domain msl:NOAAStation ;
-                                                                                      rdfs:range xsd:double ;
-                                                                                      skos:definition "Relates a NOAA station to its 95% confidence interval for its recorded mean sea level change in mm/yr." ;
-                                                                                      skos:prefLabel "95% confidence interval (mm/yr)" .
 
 
 #################################################################
@@ -95,7 +86,6 @@ msl:yearRange rdf:type owl:DatatypeProperty ;
 ###  https://w3id.org/semanticarts/ontology/meanSeaLevel#DistancePerDuration
 msl:DistancePerDuration rdf:type owl:Class ;
                         rdfs:subClassOf gist:RatioMagnitude ;
-                        rdfs:comment "The data available for NOAA stations only extended through 2023. Actual end date defaults to 2023 for any stations active in 2023." ;
                         skos:definition "Magnitudes for distance changed over a period of time." ;
                         skos:prefLabel "Distance per Duration" .
 
@@ -105,6 +95,13 @@ msl:NOAAStation rdf:type owl:Class ;
                 rdfs:subClassOf gist:System ;
                 skos:definition "A NOAA (National Oceanic and Atmospheric Administration) station which measures changes in sea level." ;
                 skos:prefLabel "NOAA Station" .
+
+
+###  https://w3id.org/semanticarts/ontology/meanSeaLevel#meanSeaLevelChange
+msl:meanSeaLevelChange rdf:type owl:Class ;
+                       rdfs:subClassOf gist:HistoricalEvent ;
+                       skos:definition "The mean sea level change, relative to a fixed point on land, recorded over a period of time by some entity." ;
+                       skos:prefLabel "Mean Sea Level Change" .
 
 
 #################################################################

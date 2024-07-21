@@ -9,18 +9,29 @@ PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
 
 CONSTRUCT {
     ?Station_iri a msl:NOAAStation ;
-            msl:measuresSeaLevelRelativeTo ?IDPoint_iri ;
-            msl:hasMeanSeaLevelChange ?MSL_MmYr_iri ;
-            msl:hasMeanSeaLevelChange ?MSL_FtC_iri ;
+            msl:hasMeanSeaLevelChange ?MSLC_MmYr_iri ;
+            msl:hasMeanSeaLevelChange ?MSLC_FtC_iri ;
             msl:StationID ?StationID ;
             msl:StationName ?StationName ;
+            skos:prefLabel ?stationLabel .
+    ?MSLC_MmYr_iri a msl:meanSeaLevelChange ;
+            msl:measurementOfSeaLevelRelativeTo ?IDPoint_iri ;
+            gist:hasMagnitude ?MSL_MmYr_iri ;
             msl:yearRange ?number0 ;
             gist:actualEndYear ?number1 ;
             gist:actualStartYear ?number2 ;
             msl:percentageComplete ?number3 ;
-            msl:95PercentConfidenceIntervalMmYr ?number4 ;
-            msl:95PercentConfidenceIntervalFtCent ?number5 ;
-            skos:prefLabel ?stationLabel .
+            msl:has95PercentConfidenceInterval ?number4 ;
+            skos:prefLabel ?cMmYrLabel .
+    ?MSLC_FtC_iri a msl:meanSeaLevelChange ;
+            msl:measurementOfSeaLevelRelativeTo ?IDPoint_iri ;
+            gist:hasMagnitude ?MSL_FtC_iri ;
+            msl:yearRange ?number0 ;
+            gist:actualEndYear ?number1 ;
+            gist:actualStartYear ?number2 ;
+            msl:percentageComplete ?number3 ;
+            msl:has95PercentConfidenceInterval ?number5 ;
+            skos:prefLabel ?cFtCLabel .
     ?MSL_MmYr_iri a msl:DistancePerDuration ;
             gist:numericValue ?number6 ;
             gist:hasUnitOfMeasure msl:_millimetersPerYear ;
@@ -39,6 +50,8 @@ WHERE {
     BIND(IRI(CONCAT("https://w3id.org/semanticarts/ontology/meanSeaLevel#_", STR(?MSLTrendsMmYr), "_MillimetersPerYear")) AS ?MSL_MmYr_iri)
     BIND(IRI(CONCAT("https://w3id.org/semanticarts/ontology/meanSeaLevel#_", STR(?MSLTrendFtCentury), "_FeetPerCentury")) AS ?MSL_FtC_iri)
     BIND(IRI(CONCAT("https://w3id.org/semanticarts/ontology/meanSeaLevel#_", STR(?StationID), "_GeoPoint")) AS ?IDPoint_iri)
+    BIND(IRI(CONCAT("https://w3id.org/semanticarts/ontology/meanSeaLevel#_", STR(?StationID), "_MeanSeaLevelChange_MillimitersPerYear" AS ?MSLC_MmYr_iri)))
+    BIND(IRI(CONCAT("https://w3id.org/semanticarts/ontology/meanSeaLevel#_", STR(?StationID), "_MeanSeaLevelChange_FeetPerCentury" AS ?MSLC_FtC_iri)))
     BIND(xsd:int(?YearRange) AS ?number0)
     BIND(xsd:dateTime(CONCAT(STR(?LastYear), "-01-01T00:00:00")) AS ?number1)
     BIND(xsd:dateTime(CONCAT(STR(?FirstYear), "-01-01T00:00:00")) AS ?number2)
@@ -52,5 +65,7 @@ WHERE {
     BIND(CONCAT(STR(?StationName), " NOAA Station") AS ?stationLabel)
     BIND(CONCAT(STR(?MSLTrendsMmYr), " (mm/yr)") AS ?mmYrLabel)
     BIND(CONCAT(STR(?MSLTrendFtCentury), " (ft/C)") AS ?ftCLabel)
+    BIND(CONCAT("Station", " ", STR(?StationID),  " ", "Mean Sea Level Change (mm/yr)") AS ?cMmYrLabel)
+    BIND(CONCAT("Station", " ", STR(?StationID),  " ", "Mean Sea Level Change (ft/C)") AS ?cMmYrLabel)
     BIND(CONCAT("Benchmark of NOAA Station", " ", STR(?StationID)) AS ?geoPointLabel)
 }
